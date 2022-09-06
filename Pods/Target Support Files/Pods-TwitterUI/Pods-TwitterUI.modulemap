@@ -1,0 +1,6 @@
+framework module Pods_TwitterUI {
+  umbrella header "Pods-TwitterUI-umbrella.h"
+
+  export *
+  module * { export * }
+}
