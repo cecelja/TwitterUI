@@ -31,8 +31,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private func handle(_ urlContexts: Set<UIOpenURLContext>) {
         print("Handle on open")
         if let url = urlContexts.first?.url{
-            @Binding var _: String = url.absoluteString
-            print("handle" + url.absoluteString)
+            guard let components = NSURLComponents(url: url, resolvingAgainstBaseURL: true), let host = components.host else {
+                print("Invalid URL")
+                return
+            }
+            print("components: \(components)")
+
+            guard let deepLink = DeepLink(rawValue: host) else {
+                print("Deeplink not found: \(host)")
+                return
+            }
+            print(deepLink)
+            
+            mainViewController.handleDeepLink(deepLink, givenParam: components.query)
         }
     }
 
