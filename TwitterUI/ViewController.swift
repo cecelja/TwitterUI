@@ -41,10 +41,11 @@ class ViewController: UIViewController {
     lazy var tagsStackView2: UIStackView = UIStackView.with()
     lazy var followStackView: UIStackView = UIStackView.with()
     
+    lazy var containterView: UIView = UIView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        print("ViewDidLoad")
         addSubviews()
         setUpConstraints()
         profileImageView.layoutIfNeeded()
