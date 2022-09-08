@@ -12,19 +12,8 @@ class ViewController: UIViewController {
     
     var twitterUserNameString: String = "Apple Inc."
     
-    lazy var wallpaperImageView: UIImageView = {
-        let image = UIImage(named: "wallpaper_apple.jpg")
-        let imageView = UIImageView(image: image)
-        imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
-    
-    lazy var profileImageView: UIImageView = {
-        let image = UIImage(named: "profile_apple.jpg")
-        let imageView = UIImageView(image: image)
-        imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
+    lazy var wallpaperImageView: UIImageView = UIImageView.with(imageResource: "wallpaper_apple.jpg")
+    lazy var profileImageView: UIImageView = UIImageView.with(imageResource: "profile_apple.jpg")
     
     lazy var followButton: UIButton = {
         let btn = UIButton()
@@ -36,42 +25,53 @@ class ViewController: UIViewController {
         return btn
     }()
     
-    lazy var twitterUsernameView: UILabel = createLabel(text: twitterUserNameString, color: .black, fontType: UIFont.boldSystemFont(ofSize: 32))
+    lazy var twitterUsernameView: UILabel = UILabel.with(text: twitterUserNameString, color: .black, size: 32, fontStyle: "bold")
+    lazy var twitterHandleView: UILabel = UILabel.with(text: "@applecompany", color: .gray, size: 18, fontStyle: "bold")
+    lazy var twitterDescriptionView: UILabel = UILabel.with(text: "most valuable company in the world, maker of the iphone, ipad and macbook air/ pro, steve made us, USA company, just built the newest headquarters", color: .black, size: 18, fontStyle: "system")
+    lazy var tagView1: UILabel = UILabel.with(text: "Cupertion, CA", color: .gray, size: 16, fontStyle: "bold")
+    lazy var tagView2: UILabel = UILabel.with(text: "Fortune 500", color: .gray, size: 16, fontStyle: "bold")
+    lazy var tagView3: UILabel = UILabel.with(text: "Consumer Electronics", color: .gray, size: 16, fontStyle: "bold")
+    lazy var tagView4: UILabel = UILabel.with(text: "Software services", color: .gray, size: 16, fontStyle: "bold")
+    lazy var followingCountLabel: UILabel = UILabel.with(text: "10.2K", color: .black, size: 18, fontStyle: "bold")
+    lazy var followingLabel: UILabel = UILabel.with(text: "Following", color: .black, size: 18, fontStyle: "bold")
+    lazy var followersCountLabel: UILabel = UILabel.with(text: "514K", color: .black, size: 18, fontStyle: "bold")
+    lazy var followersLabel: UILabel = UILabel.with(text: "Followers", color: .black, size: 18, fontStyle: "bold")
     
-    lazy var twitterHandleView: UILabel = createLabel(text: "@applecompany", color: .gray, fontType: UIFont.boldSystemFont(ofSize: 18))
+    lazy var tagsStackView: UIStackView = UIStackView.with()
+    lazy var tagsStackView2: UIStackView = UIStackView.with()
+    lazy var followStackView: UIStackView = UIStackView.with()
     
-    lazy var twitterDescriptionView: UILabel = createLabel(text: "most valuable company in the world, maker of the iphone, ipad and macbook air/ pro, steve made us, USA company, just built the newest headquarters", color: .black, fontType: UIFont.systemFont(ofSize: 18))
-    
-    lazy var tagView1: UILabel = createLabel(text: "California (USA)", color: .gray, fontType: UIFont.boldSystemFont(ofSize: 16))
-    lazy var tagView2: UILabel = createLabel(text: "Fortune 500", color: .gray, fontType: UIFont.boldSystemFont(ofSize: 16))
-    lazy var tagView3: UILabel = createLabel(text: "Consumer electronics", color: .gray, fontType: UIFont.boldSystemFont(ofSize: 16))
-    lazy var tagView4: UILabel = createLabel(text: "Software services", color: .gray, fontType: UIFont.boldSystemFont(ofSize: 16))
-    
-
-    lazy var tagsStackView: UIStackView = createHorizontalStackView()
-    lazy var tagsStackView2: UIStackView = createHorizontalStackView()
-    lazy var followStackView: UIStackView = createHorizontalStackView()
-    
-    lazy var followingCountLabel: UILabel = createLabel(text: "10.2K", color: .black, fontType: UIFont.boldSystemFont(ofSize: 18))
-    lazy var followingLabel: UILabel = createLabel(text: "Following", color: .black, fontType: UIFont.boldSystemFont(ofSize: 18))
-    lazy var followersCountLabel: UILabel = createLabel(text: "514K", color: .black, fontType: UIFont.boldSystemFont(ofSize: 18))
-    lazy var followersLabel: UILabel = createLabel(text: "Followers", color: .black, fontType: UIFont.boldSystemFont(ofSize: 18))
-    
-
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-
+        print("ViewDidLoad")
         addSubviews()
         setUpConstraints()
         profileImageView.layoutIfNeeded()
-        profileImageView.makeRounded()
+        profileImageView.makeRounded(divideHeightBy: 2.0)
         followButton.layoutIfNeeded()
-        followButton.layer.cornerRadius = followButton.frame.width/6
-        followButton.layer.masksToBounds = true
-        followButton.layer.borderWidth = 2
-        followButton.layer.borderColor = UIColor.black.cgColor
+        followButton.makeRounded(divideHeightBy: 2.0)
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "arrow.backward"),
+            style: .done,
+            target: self,
+            action: #selector(dismissSelf))
+        
+        let ellipsisIcon = UIImage(systemName: "ellipsis")
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: ellipsisIcon,
+            style: .done,
+            target: self,
+            action: .none)
     }
+    
+    
+    @objc func dismissSelf() {
+        navigationController?.popViewController(animated: true)
+    }
+    
 
     func addSubviews() {
         view.addSubview(wallpaperImageView)
@@ -96,6 +96,8 @@ class ViewController: UIViewController {
         followStackView.addArrangedSubview(followersLabel)
         view.addSubview(followStackView)
     }
+    
+
     
     func setUpConstraints() {
         wallpaperImageView.snp.makeConstraints{make in
@@ -154,34 +156,9 @@ class ViewController: UIViewController {
         followButton.setTitle("Following", for: .normal)
         followButton.layoutIfNeeded()
     }
-    
-    func createLabel(text: String, color: UIColor, fontType: UIFont) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.textColor = color
-        label.font = fontType
-        label.contentMode = .scaleAspectFit
-        return label
-    }
-    
-    func createHorizontalStackView() -> UIStackView {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.distribution = .fillProportionally
-        stack.spacing = 8
-        stack.alignment = .leading
-        return stack
-    }
+
 }
 
-extension UIImageView {
-    func makeRounded() {
-        layer.borderWidth = 1
-        layer.masksToBounds = false
-        layer.borderColor = UIColor.black.cgColor
-        layer.cornerRadius = self.frame.height / 2
-        clipsToBounds = true
-    }
-}
+
 
 

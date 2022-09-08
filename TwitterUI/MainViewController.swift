@@ -23,9 +23,28 @@ class MainViewController: UIViewController {
         return btn
     }()
     
+    
+    
     @objc func goToTwitter() {
-        self.present(ViewController(), animated: true)
+        navigationController?.pushViewController(viewController, animated: true)
+//        let navController = UINavigationController(rootViewController: viewController)
+//
+//        viewController.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .done, target: viewController, action: #selector(dismissSelf))
+//
+//        let ellipsisIcon = UIImage(systemName: "ellipsis")
+//
+//        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem(
+//                    image: ellipsisIcon,
+//                    style: .done,
+//                    target: viewController,
+//                    action: .none)
+//
+//        navController.navigationBar.barStyle = .black
+//
+//        present(navController, animated: true)
+        
     }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,37 +54,41 @@ class MainViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
             make.width.equalTo(200)
+                
+
+        
+
         }
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: .none)
         clickMeButton.layoutIfNeeded()
-        clickMeButton.layer.cornerRadius = clickMeButton.frame.width/16
-        clickMeButton.layer.masksToBounds = true
+        clickMeButton.makeRounded(divideHeightBy: 2)
 
     }
 }
 
 extension MainViewController {
-    func handleDeepLink(_ deepLink: DeepLink, givenParam: String) {
+    func handleDeepLink(_ deepLink: DeepLink, givenParam: String?) {
         switch deepLink {
         case .apple:
-            if (givenParam != "") {
-                viewController.twitterUserNameString = givenParam
-                print(viewController.isBeingPresented)
-//                if viewController.isBeingPresented {
-//                    print("View not presented")
-//                    viewController.viewDidLoad()
-//                } else  {
-//                    print("view presented")
-//                    present(self.viewController, animated: true)
-//                }
+            if(navigationController?.viewControllers.first === viewController) {
+                print("My presenting view controller")
+                if let param = givenParam {
+                    print("Param")
+                    (navigationController?.viewControllers.first as? ViewController)?.twitterUsernameView.text = param
+                }
+                viewController.viewDidLayoutSubviews()
             } else {
-                print("why not printing?")
-                present(self.viewController, animated: true)
+                navigationController?.pushViewController(self, animated: true)
+                navigationController?.pushViewController(viewController, animated: true)
             }
         case .home:
-            if (self.isBeingPresented) {
-                print("It is already presenting!")
+            print("Home")
+            if(navigationController?.viewControllers.first != nil) {
+                print("Dismissal")
             } else {
-                try? present(self, animated: true)
+                print("else")
+                navigationController?.pushViewController(self, animated: true)
             }
         }
     }

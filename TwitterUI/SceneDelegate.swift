@@ -17,7 +17,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = mainViewController // Your initial view controller.
+        let vc = mainViewController
+        window.rootViewController = UINavigationController(rootViewController: vc)
         window.makeKeyAndVisible()
         self.window = window
         self.handle(connectionOptions.urlContexts)
@@ -30,8 +31,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             print("handle" + url.absoluteString)
         }
     }
-    
-    
 
     func sceneDidDisconnect(_ scene: UIScene) {}
 
@@ -41,11 +40,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func sceneWillEnterForeground(_ scene: UIScene) {}
 
-    func sceneDidEnterBackground(_ scene: UIScene) {
-        // Called as the scene transitions from the foreground to the background.
-        // Use this method to save data, release shared resources, and store enough scene-specific state information
-        // to restore the scene back to its current state.
-    }
+    func sceneDidEnterBackground(_ scene: UIScene) {}
     
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         guard let firstUrl = URLContexts.first?.url else {
@@ -65,8 +60,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return
         }
         print(deepLink)
-        mainViewController.handleDeepLink(deepLink, givenParam: components.query ?? "")
-        
+        mainViewController.handleDeepLink(deepLink, givenParam: components.query)
 
     }
     
