@@ -27,7 +27,7 @@ class ViewController: UIViewController {
     
     lazy var twitterUsernameView: UILabel = UILabel.with(text: twitterUserNameString, color: .black, size: 32, fontStyle: "bold")
     lazy var twitterHandleView: UILabel = UILabel.with(text: "@applecompany", color: .gray, size: 18, fontStyle: "bold")
-    lazy var twitterDescriptionView: UILabel = UILabel.with(text: "most valuable company in the world, maker of the iphone, ipad and macbook air/ pro, steve made us, USA company, just built the newest headquarters", color: .black, size: 18, fontStyle: "system")
+    lazy var twitterDescriptionView: UILabel = UILabel.with(text: "most valuable company in the world, maker of the iphone, ipad and macbook air/ pro, steve made us, USA company, just built the newest headquarters", color: .black, size: 40, fontStyle: "system")
     lazy var tagView1: UILabel = UILabel.with(text: "Cupertion, CA", color: .gray, size: 16, fontStyle: "bold")
     lazy var tagView2: UILabel = UILabel.with(text: "Fortune 500", color: .gray, size: 16, fontStyle: "bold")
     lazy var tagView3: UILabel = UILabel.with(text: "Consumer Electronics", color: .gray, size: 16, fontStyle: "bold")
@@ -40,6 +40,9 @@ class ViewController: UIViewController {
     lazy var tagsStackView: UIStackView = UIStackView.with()
     lazy var tagsStackView2: UIStackView = UIStackView.with()
     lazy var followStackView: UIStackView = UIStackView.with()
+
+    lazy var containerView = UIView()
+    lazy var scrollView = UIScrollView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,32 +76,40 @@ class ViewController: UIViewController {
     
 
     func addSubviews() {
-        view.addSubview(wallpaperImageView)
-        view.addSubview(profileImageView)
-        view.addSubview(twitterUsernameView)
-        view.addSubview(twitterHandleView)
+        view.addSubview(scrollView)
+        scrollView.addSubview(containerView)
+        containerView.addSubview(wallpaperImageView)
+        containerView.addSubview(profileImageView)
+        containerView.addSubview(twitterUsernameView)
+        containerView.addSubview(twitterHandleView)
         twitterDescriptionView.numberOfLines = 0
-        view.addSubview(twitterDescriptionView)
-        view.addSubview(followButton)
+        containerView.addSubview(twitterDescriptionView)
+        containerView.addSubview(followButton)
         
         tagsStackView.addArrangedSubview(tagView1)
         tagsStackView.addArrangedSubview(tagView2)
-        view.addSubview(tagsStackView)
+        containerView.addSubview(tagsStackView)
         
         tagsStackView2.addArrangedSubview(tagView3)
         tagsStackView2.addArrangedSubview(tagView4)
-        view.addSubview(tagsStackView2)
+        containerView.addSubview(tagsStackView2)
         
         followStackView.addArrangedSubview(followingCountLabel)
         followStackView.addArrangedSubview(followingLabel)
         followStackView.addArrangedSubview(followersCountLabel)
         followStackView.addArrangedSubview(followersLabel)
-        view.addSubview(followStackView)
+        containerView.addSubview(followStackView)
     }
     
 
     
     func setUpConstraints() {
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        containerView.snp.makeConstraints { make in
+            make.edges.width.equalToSuperview()
+        }
         wallpaperImageView.snp.makeConstraints{make in
             make.top.equalToSuperview()
             make.leading.trailing.equalToSuperview()
@@ -148,6 +159,7 @@ class ViewController: UIViewController {
         followStackView.snp.makeConstraints{make in 
             make.top.equalTo(tagsStackView2.snp.bottom).offset(12)
             make.leading.equalToSuperview().inset(24)
+            make.bottom.lessThanOrEqualToSuperview()
         }
     }
     
