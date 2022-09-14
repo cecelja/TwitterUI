@@ -20,8 +20,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let window = UIWindow(windowScene: windowScene)
         let vc = mainViewController
-        window.rootViewController = UINavigationController(rootViewController: vc)
+        let navBar = UINavigationController(rootViewController: vc)
+        window.rootViewController = navBar
         window.makeKeyAndVisible()
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundColor = .clear
+        navBar.navigationBar.standardAppearance = appearance
+        navBar.navigationBar.scrollEdgeAppearance = navBar.navigationBar.standardAppearance
+        
+        
         self.window = window
         print("willConnectTo")
         self.handle(connectionOptions.urlContexts)

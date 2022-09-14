@@ -53,6 +53,7 @@ class ViewController: UIViewController {
         profileImageView.makeRounded(divideHeightBy: 2.0)
         followButton.layoutIfNeeded()
         followButton.makeRounded(divideHeightBy: 2.0)
+        scrollView.inputViewController?.extendedLayoutIncludesOpaqueBars = true
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "arrow.backward"),
@@ -105,10 +106,11 @@ class ViewController: UIViewController {
     
     func setUpConstraints() {
         scrollView.snp.makeConstraints { make in
-              make.edges.equalToSuperview()
+            make.edges.equalToSuperview()
           }
           containerView.snp.makeConstraints { make in
               make.edges.width.equalToSuperview()
+              make.top.equalToSuperview().inset(-60)
           }
         wallpaperImageView.snp.makeConstraints{make in
             make.top.equalToSuperview()
